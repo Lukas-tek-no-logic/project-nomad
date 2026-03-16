@@ -16,17 +16,46 @@
 
 Project N.O.M.A.D. is a self-contained, offline-first knowledge and education server packed with critical tools, knowledge, and AI to keep you informed and empowered—anytime, anywhere.
 
+## This Fork — arm64 Support
+
+This fork adds **arm64 (aarch64) support** — Raspberry Pi 5, Apple Silicon servers, AWS Graviton, and other ARM-based systems.
+
+**Changes from upstream:**
+- Docker images built for `linux/arm64` and published to `ghcr.io/lukas-tek-no-logic/`
+- `install_nomad.sh` and `management_compose.yaml` point to this fork's registry
+- New **Proxmox LXC installer** with interactive service & map selection
+
+---
+
 ## Installation & Quickstart
-Project N.O.M.A.D. can be installed on any Debian-based operating system (we recommend Ubuntu). Installation is completely terminal-based, and all tools and resources are designed to be accessed through the browser, so there's no need for a desktop environment if you'd rather setup N.O.M.A.D. as a "server" and access it through other clients.
 
-*Note: sudo/root privileges are required to run the install script*
+### Option A — Proxmox LXC (arm64 / amd64)
 
-#### Quick Install
+Run on the **Proxmox host shell**. Creates a Debian 12 LXC with Docker, interactive menu for services and map regions.
+
 ```bash
-sudo apt-get update && sudo apt-get install -y curl && curl -fsSL https://raw.githubusercontent.com/Crosstalk-Solutions/project-nomad/refs/heads/main/install/install_nomad.sh -o install_nomad.sh && sudo bash install_nomad.sh
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Lukas-tek-no-logic/project-nomad/main/install-proxmox.sh)"
 ```
 
-Project N.O.M.A.D. is now installed on your device! Open a browser and navigate to `http://localhost:8080` (or `http://DEVICE_IP:8080`) to start exploring!
+**What you can select during install:**
+| Service | Port | Description |
+|---------|------|-------------|
+| AI Assistant (Ollama) | 11434 + `/chat` | Local LLM — choose model during install |
+| Information Library (Kiwix) | 8090 | Offline Wikipedia, books |
+| Education (Kolibri) | 8300 | Interactive courses |
+| Data Tools (CyberChef) | 8100 | Encoding, encryption, analysis |
+| Notes (FlatNotes) | 8200 | Local markdown notes |
+| Offline Maps | — | US regional PMTiles, downloaded during install |
+
+### Option B — Existing arm64 server (Debian/Ubuntu)
+
+```bash
+sudo apt-get update && sudo apt-get install -y curl && \
+curl -fsSL https://raw.githubusercontent.com/Lukas-tek-no-logic/project-nomad/refs/heads/main/install/install_nomad.sh \
+  -o install_nomad.sh && sudo bash install_nomad.sh
+```
+
+Project N.O.M.A.D. is now installed! Open a browser and navigate to `http://localhost:8080` (or `http://DEVICE_IP:8080`) to start exploring!
 
 ## How It Works
 N.O.M.A.D. is a management UI ("Command Center") and API that orchestrates a collection of containerized tools and resources via [Docker](https://www.docker.com/). It handles installation, configuration, and updates for everything — so you don't have to.
@@ -78,6 +107,11 @@ To run LLM's and other included AI tools:
 - Graphics: NVIDIA RTX 3060 or AMD equivalent or better (more VRAM = run larger models)
 - Storage: At least 250 GB free disk space (preferably on SSD)
 - OS: Debian-based (Ubuntu recommended)
+
+#### arm64 Tested Hardware
+- Raspberry Pi 5 (8 GB)
+- Ampere / AWS Graviton instances
+- Any aarch64 Debian/Ubuntu server
 - Stable internet connection (required during install only)
 
 **For detailed build recommendations at three price points ($200–$800+), see the [Hardware Guide](https://www.projectnomad.us/hardware).**
