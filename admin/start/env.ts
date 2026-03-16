@@ -60,4 +60,17 @@ export default await Env.create(new URL('../', import.meta.url), {
   |----------------------------------------------------------
   */
   NOMAD_API_URL: Env.schema.string.optional(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for configuring the LLM backend
+  |----------------------------------------------------------
+  | LLM_BACKEND_TYPE: 'ollama' (default) or 'llamacpp'
+  | LLM_REMOTE_URL: Full URL to a remote LLM server (e.g. http://192.168.0.50:11434)
+  |                  When set, bypasses Docker service discovery.
+  | OLLAMA_REMOTE_URL: Shorthand alias for LLM_REMOTE_URL with ollama backend.
+  */
+  LLM_BACKEND_TYPE: Env.schema.enum.optional(['ollama', 'llamacpp'] as const),
+  LLM_REMOTE_URL: Env.schema.string.optional(),
+  OLLAMA_REMOTE_URL: Env.schema.string.optional(),
 })
