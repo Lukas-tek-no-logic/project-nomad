@@ -148,28 +148,70 @@ INSTALL_CYBERCHEF=false
 INSTALL_FLATNOTES=false
 OLLAMA_MODEL=""
 PULL_MAPS=()
+LLM_BACKEND_TYPE=""
+LLM_REMOTE_URL=""
+LLM_LOCAL_OLLAMA=false
 
-if ask_yn "  AI Assistant — Ollama (local LLM, no internet) [y/N]: " "n"; then
+if ask_yn "  AI Assistant — LLM-powered chat with knowledge base [y/N]: " "n"; then
     INSTALL_OLLAMA=true
-    ok "AI Assistant selected (port 11434)"
     echo ""
-    echo "  Select AI model to pre-download:"
-    echo "    1) llama3.2:3b    (~2 GB, fast, good quality)"
-    echo "    2) llama3.2:1b    (~1 GB, very fast, lighter)"
-    echo "    3) mistral:7b     (~4 GB, excellent quality)"
-    echo "    4) phi3:mini      (~2 GB, Microsoft, efficient)"
-    echo "    5) gemma3:4b      (~3 GB, Google, multilingual)"
-    echo "    6) None (download later via UI)"
-    MODEL_CHOICE=$(ask "  Choice [1]: " "1")
-    case "$MODEL_CHOICE" in
-        1) OLLAMA_MODEL="llama3.2:3b" ;;
-        2) OLLAMA_MODEL="llama3.2:1b" ;;
-        3) OLLAMA_MODEL="mistral:7b" ;;
-        4) OLLAMA_MODEL="phi3:mini" ;;
-        5) OLLAMA_MODEL="gemma3:4b" ;;
-        *) OLLAMA_MODEL="" ;;
+    echo "  LLM backend:"
+    echo "    1) Local Ollama     — runs on this machine (default, no internet needed)"
+    echo "    2) Remote Ollama    — connect to Ollama running on another server"
+    echo "    3) Remote llama.cpp — connect to llama-server on another server"
+    LLM_CHOICE=$(ask "  Choice [1]: " "1")
+    case "$LLM_CHOICE" in
+        2)
+            LLM_BACKEND_TYPE="ollama"
+            LLM_REMOTE_URL=$(ask "  Remote Ollama URL (e.g. http://192.168.0.50:11434): " "")
+            if [[ -z "$LLM_REMOTE_URL" ]]; then
+                err "Remote URL is required for remote Ollama. Falling back to local."
+                LLM_LOCAL_OLLAMA=true
+                LLM_BACKEND_TYPE=""
+                LLM_REMOTE_URL=""
+            else
+                ok "Remote Ollama: $LLM_REMOTE_URL"
+            fi
+            ;;
+        3)
+            LLM_BACKEND_TYPE="llamacpp"
+            LLM_REMOTE_URL=$(ask "  Remote llama.cpp URL (e.g. http://192.168.0.50:8080): " "")
+            if [[ -z "$LLM_REMOTE_URL" ]]; then
+                err "Remote URL is required for llama.cpp. Falling back to local Ollama."
+                LLM_LOCAL_OLLAMA=true
+                LLM_BACKEND_TYPE=""
+                LLM_REMOTE_URL=""
+            else
+                ok "Remote llama.cpp: $LLM_REMOTE_URL"
+            fi
+            ;;
+        *)
+            LLM_LOCAL_OLLAMA=true
+            ok "Local Ollama selected (port 11434)"
+            ;;
     esac
-    [[ -n "$OLLAMA_MODEL" ]] && ok "Model: $OLLAMA_MODEL"
+
+    # Model selection only for local Ollama (remote manages its own models)
+    if $LLM_LOCAL_OLLAMA; then
+        echo ""
+        echo "  Select AI model to pre-download:"
+        echo "    1) llama3.2:3b    (~2 GB, fast, good quality)"
+        echo "    2) llama3.2:1b    (~1 GB, very fast, lighter)"
+        echo "    3) mistral:7b     (~4 GB, excellent quality)"
+        echo "    4) phi3:mini      (~2 GB, Microsoft, efficient)"
+        echo "    5) gemma3:4b      (~3 GB, Google, multilingual)"
+        echo "    6) None (download later via UI)"
+        MODEL_CHOICE=$(ask "  Choice [1]: " "1")
+        case "$MODEL_CHOICE" in
+            1) OLLAMA_MODEL="llama3.2:3b" ;;
+            2) OLLAMA_MODEL="llama3.2:1b" ;;
+            3) OLLAMA_MODEL="mistral:7b" ;;
+            4) OLLAMA_MODEL="phi3:mini" ;;
+            5) OLLAMA_MODEL="gemma3:4b" ;;
+            *) OLLAMA_MODEL="" ;;
+        esac
+        [[ -n "$OLLAMA_MODEL" ]] && ok "Model: $OLLAMA_MODEL"
+    fi
 fi
 
 echo ""
@@ -243,7 +285,11 @@ echo "    IP:         $CT_IP"
 echo "    RAM/Disk:   ${RAM} MB / ${DISK} GB"
 echo "    Arch:       $ARCH"
 echo "    Services:   Command Center, MySQL, Redis, Dozzle"
-$INSTALL_OLLAMA    && echo "                + AI Assistant (Ollama${OLLAMA_MODEL:+ — $OLLAMA_MODEL})"
+if $INSTALL_OLLAMA && [[ -n "$LLM_REMOTE_URL" ]]; then
+    echo "                + AI Assistant (${LLM_BACKEND_TYPE} @ ${LLM_REMOTE_URL})"
+elif $INSTALL_OLLAMA; then
+    echo "                + AI Assistant (local Ollama${OLLAMA_MODEL:+ — $OLLAMA_MODEL})"
+fi
 $INSTALL_KIWIX     && echo "                + Information Library (Kiwix)"
 $INSTALL_KOLIBRI   && echo "                + Education Platform (Kolibri)"
 $INSTALL_CYBERCHEF && echo "                + Data Tools (CyberChef)"
@@ -302,7 +348,7 @@ hdr "[7/8] Pulling images + starting N.O.M.A.D..."
 
 # Build list of extra images to pre-pull
 EXTRA_PULLS=()
-$INSTALL_OLLAMA    && EXTRA_PULLS+=("ollama/ollama:0.15.2" "qdrant/qdrant:v1.16")
+$LLM_LOCAL_OLLAMA  && EXTRA_PULLS+=("ollama/ollama:0.15.2" "qdrant/qdrant:v1.16")
 $INSTALL_KIWIX     && EXTRA_PULLS+=("ghcr.io/kiwix/kiwix-serve:3.8.1")
 $INSTALL_KOLIBRI   && EXTRA_PULLS+=("treehouses/kolibri:0.12.8")
 $INSTALL_CYBERCHEF && EXTRA_PULLS+=("ghcr.io/gchq/cyberchef:10.19.4")
@@ -342,6 +388,15 @@ sed -i "s|DB_PASSWORD=replaceme|DB_PASSWORD=\${DB_PASS}|g"     "${NOMAD_DIR}/com
 sed -i "s|MYSQL_ROOT_PASSWORD=replaceme|MYSQL_ROOT_PASSWORD=\${ROOT_PASS}|g" "${NOMAD_DIR}/compose.yml"
 sed -i "s|MYSQL_PASSWORD=replaceme|MYSQL_PASSWORD=\${DB_PASS}|g" "${NOMAD_DIR}/compose.yml"
 
+# Inject LLM backend configuration if using remote server
+LLM_BACKEND_TYPE_VAL="${LLM_BACKEND_TYPE}"
+LLM_REMOTE_URL_VAL="${LLM_REMOTE_URL}"
+if [[ -n "\${LLM_REMOTE_URL_VAL}" ]]; then
+    # Uncomment and set the LLM env vars in compose.yml
+    sed -i "s|# - LLM_BACKEND_TYPE=ollama|      - LLM_BACKEND_TYPE=\${LLM_BACKEND_TYPE_VAL}|g" "${NOMAD_DIR}/compose.yml"
+    sed -i "s|# - LLM_REMOTE_URL=http://192.168.0.50:11434|      - LLM_REMOTE_URL=\${LLM_REMOTE_URL_VAL}|g" "${NOMAD_DIR}/compose.yml"
+fi
+
 echo "Starting core services..."
 cd "${NOMAD_DIR}"
 docker compose -p project-nomad -f compose.yml up -d
@@ -359,7 +414,7 @@ if [[ ${#EXTRA_PULLS[@]} -gt 0 ]]; then
 fi
 
 # Start selected optional services
-if $INSTALL_OLLAMA; then
+if $LLM_LOCAL_OLLAMA; then
     info "Starting Qdrant (vector DB)..."
     pct exec "$CTID" -- docker run -d \
         --name nomad_qdrant \
@@ -377,6 +432,8 @@ if $INSTALL_OLLAMA; then
         -v "${NOMAD_DIR}/storage/ollama:/root/.ollama" \
         -p 11434:11434 \
         ollama/ollama:0.15.2 serve || warn "Ollama start failed"
+elif $INSTALL_OLLAMA && [[ -n "$LLM_REMOTE_URL" ]]; then
+    info "Using remote LLM backend at $LLM_REMOTE_URL — skipping local Ollama/Qdrant containers"
 fi
 
 if $INSTALL_KIWIX; then
@@ -423,8 +480,8 @@ if $INSTALL_KOLIBRI; then
         treehouses/kolibri:0.12.8 || warn "Kolibri start failed"
 fi
 
-# Pull Ollama model
-if $INSTALL_OLLAMA && [[ -n "$OLLAMA_MODEL" ]]; then
+# Pull Ollama model (only for local Ollama)
+if $LLM_LOCAL_OLLAMA && [[ -n "$OLLAMA_MODEL" ]]; then
     info "Waiting for Ollama to start..."
     sleep 10
     info "Pulling model $OLLAMA_MODEL (this may take a while)..."
@@ -487,7 +544,11 @@ echo -e "${NC}"
 echo -e "  Command Center:  ${BOLD}http://${CT_BARE_IP}:8080${NC}"
 echo -e "  Log Viewer:      http://${CT_BARE_IP}:9999"
 echo ""
-$INSTALL_OLLAMA    && echo -e "  AI Assistant:    http://${CT_BARE_IP}:8080/chat  (Ollama: port 11434)"
+if $INSTALL_OLLAMA && [[ -n "$LLM_REMOTE_URL" ]]; then
+    echo -e "  AI Assistant:    http://${CT_BARE_IP}:8080/chat  (${LLM_BACKEND_TYPE} @ ${LLM_REMOTE_URL})"
+elif $INSTALL_OLLAMA; then
+    echo -e "  AI Assistant:    http://${CT_BARE_IP}:8080/chat  (Ollama: port 11434)"
+fi
 $INSTALL_KIWIX     && echo -e "  Library:         http://${CT_BARE_IP}:8090"
 $INSTALL_CYBERCHEF && echo -e "  Data Tools:      http://${CT_BARE_IP}:8100"
 $INSTALL_FLATNOTES && echo -e "  Notes:           http://${CT_BARE_IP}:8200"

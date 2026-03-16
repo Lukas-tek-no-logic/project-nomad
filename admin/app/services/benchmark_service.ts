@@ -450,62 +450,37 @@ export class BenchmarkService {
 
     this._updateStatus('running_ai', 'Running AI benchmark...')
 
-    const ollamaAPIURL = await this.dockerService.getServiceURL(SERVICE_NAMES.OLLAMA)
-    if (!ollamaAPIURL) {
-      throw new Error('AI Assistant service location could not be determined. Ensure AI Assistant is installed and running.')
-    }
-
-    // Check if Ollama is available
-    try {
-      await axios.get(`${ollamaAPIURL}/api/tags`, { timeout: 5000 })
-    } catch (error) {
-      const errorCode = error.code || error.response?.status || 'unknown'
-      throw new Error(`Ollama is not running or not accessible (${errorCode}). Ensure AI Assistant is installed and running.`)
-    }
-
-    // Check if the benchmark model is available, pull if not
     const ollamaService = new (await import('./ollama_service.js')).OllamaService()
+
+    // For remote backends, skip Docker service URL check
+    if (!ollamaService.isRemoteBackend()) {
+      const ollamaAPIURL = await this.dockerService.getServiceURL(SERVICE_NAMES.OLLAMA)
+      if (!ollamaAPIURL) {
+        throw new Error('AI Assistant service location could not be determined. Ensure AI Assistant is installed and running, or set LLM_REMOTE_URL.')
+      }
+    }
+
+    // Ensure the benchmark model is available
     const modelResponse = await ollamaService.downloadModel(AI_BENCHMARK_MODEL)
     if (!modelResponse.success) {
       throw new Error(`Model does not exist and failed to download: ${modelResponse.message}`)
     }
 
-    // Run inference benchmark
+    // Run inference benchmark via the abstracted chat API
     const startTime = Date.now()
 
-      const response = await axios.post(
-        `${ollamaAPIURL}/api/generate`,
-        {
-          model: AI_BENCHMARK_MODEL,
-          prompt: AI_BENCHMARK_PROMPT,
-          stream: false,
-        },
-        { timeout: 120000 }
-      )
+      const response = await ollamaService.chat({
+        model: AI_BENCHMARK_MODEL,
+        messages: [{ role: 'user', content: AI_BENCHMARK_PROMPT }],
+        stream: false,
+      })
 
       const endTime = Date.now()
       const totalTime = (endTime - startTime) / 1000 // seconds
 
-      // Ollama returns eval_count (tokens generated) and eval_duration (nanoseconds)
-      if (response.data.eval_count && response.data.eval_duration) {
-        const tokenCount = response.data.eval_count
-        const evalDurationSeconds = response.data.eval_duration / 1e9
-        const tokensPerSecond = tokenCount / evalDurationSeconds
-
-        // Time to first token from prompt_eval_duration
-        const ttft = response.data.prompt_eval_duration
-          ? response.data.prompt_eval_duration / 1e6 // Convert to ms
-          : (totalTime * 1000) / 2 // Estimate if not available
-
-        return {
-          ai_tokens_per_second: Math.round(tokensPerSecond * 100) / 100,
-          ai_model_used: AI_BENCHMARK_MODEL,
-          ai_time_to_first_token: Math.round(ttft * 100) / 100,
-        }
-      }
-
-      // Fallback calculation
-      const estimatedTokens = response.data.response?.split(' ').length * 1.3 || 100
+      // Estimate tokens from response content (backend-agnostic)
+      const responseContent = response?.message?.content || ''
+      const estimatedTokens = responseContent.split(/\s+/).length * 1.3 || 100
       const tokensPerSecond = estimatedTokens / totalTime
 
       return {
