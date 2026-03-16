@@ -255,19 +255,33 @@ if ask_yn "  Maps — download offline map regions? [y/N]: " "n"; then
     echo "    8)  Mid-Atlantic     — New Jersey, New York, Pennsylvania"
     echo "    9)  New England      — Connecticut, Maine, Massachusetts, NH, Rhode Island, Vermont"
     echo ""
-    echo "  Enter region numbers separated by spaces (e.g. '1 3 8'), or Enter to skip:"
+    echo "  European regions:"
+    echo "    10) Northern Europe   — Norway, Sweden, Finland, Denmark, Iceland, Baltics"
+    echo "    11) British Isles     — United Kingdom, Ireland"
+    echo "    12) Western Europe    — France, Belgium, Netherlands, Luxembourg"
+    echo "    13) Central Europe    — Germany, Poland, Czech Republic, Austria, Switzerland, Hungary, Slovakia"
+    echo "    14) Southern Europe   — Spain, Portugal, Italy, Greece, Malta, Cyprus"
+    echo "    15) SE Europe         — Romania, Bulgaria, Croatia, Slovenia, Serbia, Balkans"
+    echo ""
+    echo "  Enter region numbers separated by spaces (e.g. '1 3 13'), or Enter to skip:"
     read -r MAP_INPUT < /dev/tty
     for n in $MAP_INPUT; do
         case "$n" in
-            1) PULL_MAPS+=("pacific") ;;
-            2) PULL_MAPS+=("mountain") ;;
-            3) PULL_MAPS+=("west-south-central") ;;
-            4) PULL_MAPS+=("east-south-central") ;;
-            5) PULL_MAPS+=("south-atlantic") ;;
-            6) PULL_MAPS+=("west-north-central") ;;
-            7) PULL_MAPS+=("east-north-central") ;;
-            8) PULL_MAPS+=("mid-atlantic") ;;
-            9) PULL_MAPS+=("new-england") ;;
+            1)  PULL_MAPS+=("pacific") ;;
+            2)  PULL_MAPS+=("mountain") ;;
+            3)  PULL_MAPS+=("west-south-central") ;;
+            4)  PULL_MAPS+=("east-south-central") ;;
+            5)  PULL_MAPS+=("south-atlantic") ;;
+            6)  PULL_MAPS+=("west-north-central") ;;
+            7)  PULL_MAPS+=("east-north-central") ;;
+            8)  PULL_MAPS+=("mid-atlantic") ;;
+            9)  PULL_MAPS+=("new-england") ;;
+            10) PULL_MAPS+=("northern-europe") ;;
+            11) PULL_MAPS+=("british-isles") ;;
+            12) PULL_MAPS+=("western-europe") ;;
+            13) PULL_MAPS+=("central-europe") ;;
+            14) PULL_MAPS+=("southern-europe") ;;
+            15) PULL_MAPS+=("southeastern-europe") ;;
         esac
     done
     if [[ ${#PULL_MAPS[@]} -gt 0 ]]; then
@@ -505,7 +519,15 @@ if [[ ${#PULL_MAPS[@]} -gt 0 ]]; then
     MAP_URLS["mid-atlantic"]="new_jersey_2025-12.pmtiles new_york_2025-12.pmtiles pennsylvania_2025-12.pmtiles"
     MAP_URLS["new-england"]="connecticut_2025-12.pmtiles maine_2025-12.pmtiles massachusetts_2025-12.pmtiles new_hampshire_2025-12.pmtiles rhode_island_2025-12.pmtiles vermont_2025-12.pmtiles"
 
-    MAP_BASE="https://github.com/Crosstalk-Solutions/project-nomad-maps/raw/refs/heads/master/pmtiles"
+    MAP_URLS["northern-europe"]="norway_2025-03.pmtiles sweden_2025-03.pmtiles finland_2025-03.pmtiles denmark_2025-03.pmtiles iceland_2025-03.pmtiles estonia_2025-03.pmtiles latvia_2025-03.pmtiles lithuania_2025-03.pmtiles"
+    MAP_URLS["british-isles"]="united_kingdom_2025-03.pmtiles ireland_2025-03.pmtiles"
+    MAP_URLS["western-europe"]="france_2025-03.pmtiles belgium_2025-03.pmtiles netherlands_2025-03.pmtiles luxembourg_2025-03.pmtiles"
+    MAP_URLS["central-europe"]="germany_2025-03.pmtiles poland_2025-03.pmtiles czech_republic_2025-03.pmtiles austria_2025-03.pmtiles switzerland_2025-03.pmtiles hungary_2025-03.pmtiles slovakia_2025-03.pmtiles"
+    MAP_URLS["southern-europe"]="spain_2025-03.pmtiles portugal_2025-03.pmtiles italy_2025-03.pmtiles greece_2025-03.pmtiles malta_2025-03.pmtiles cyprus_2025-03.pmtiles"
+    MAP_URLS["southeastern-europe"]="romania_2025-03.pmtiles bulgaria_2025-03.pmtiles croatia_2025-03.pmtiles slovenia_2025-03.pmtiles serbia_2025-03.pmtiles bosnia_herzegovina_2025-03.pmtiles montenegro_2025-03.pmtiles albania_2025-03.pmtiles north_macedonia_2025-03.pmtiles kosovo_2025-03.pmtiles"
+
+    MAP_BASE_US="https://github.com/Crosstalk-Solutions/project-nomad-maps/raw/refs/heads/master/pmtiles"
+    MAP_BASE_EU="https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles"
     MAP_DIR="${NOMAD_DIR}/storage/maps/pmtiles"
 
     # Download base map assets first
@@ -518,8 +540,18 @@ if [[ ${#PULL_MAPS[@]} -gt 0 ]]; then
         rm -f /tmp/base-assets.tar.gz
     " || warn "Base map assets download failed"
 
+    # European region slugs for URL routing
+    EU_REGIONS="northern-europe british-isles western-europe central-europe southern-europe southeastern-europe"
+
     for region in "${PULL_MAPS[@]}"; do
         info "Downloading region: $region"
+
+        # Pick the right base URL
+        MAP_BASE="${MAP_BASE_US}"
+        if echo "$EU_REGIONS" | grep -qw "$region"; then
+            MAP_BASE="${MAP_BASE_EU}"
+        fi
+
         for fname in ${MAP_URLS[$region]:-}; do
             info "  → $fname"
             pct exec "$CTID" -- bash -c "

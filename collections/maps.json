@@ -481,6 +481,356 @@
           "size_mb": 400
         }
       ]
+    },
+    {
+      "name": "Northern Europe",
+      "slug": "northern-europe",
+      "description": "Map assets for Northern Europe, including Scandinavia, Iceland, and the Baltic states.",
+      "icon": "IconMap",
+      "language": "en",
+      "resources": [
+        {
+          "id": "norway",
+          "version": "2025-03",
+          "title": "Norway",
+          "description": "Maps for Norway",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/norway_2025-03.pmtiles",
+          "size_mb": 800
+        },
+        {
+          "id": "sweden",
+          "version": "2025-03",
+          "title": "Sweden",
+          "description": "Maps for Sweden",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/sweden_2025-03.pmtiles",
+          "size_mb": 700
+        },
+        {
+          "id": "finland",
+          "version": "2025-03",
+          "title": "Finland",
+          "description": "Maps for Finland",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/finland_2025-03.pmtiles",
+          "size_mb": 500
+        },
+        {
+          "id": "denmark",
+          "version": "2025-03",
+          "title": "Denmark",
+          "description": "Maps for Denmark",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/denmark_2025-03.pmtiles",
+          "size_mb": 300
+        },
+        {
+          "id": "iceland",
+          "version": "2025-03",
+          "title": "Iceland",
+          "description": "Maps for Iceland",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/iceland_2025-03.pmtiles",
+          "size_mb": 50
+        },
+        {
+          "id": "estonia",
+          "version": "2025-03",
+          "title": "Estonia",
+          "description": "Maps for Estonia",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/estonia_2025-03.pmtiles",
+          "size_mb": 150
+        },
+        {
+          "id": "latvia",
+          "version": "2025-03",
+          "title": "Latvia",
+          "description": "Maps for Latvia",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/latvia_2025-03.pmtiles",
+          "size_mb": 150
+        },
+        {
+          "id": "lithuania",
+          "version": "2025-03",
+          "title": "Lithuania",
+          "description": "Maps for Lithuania",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/lithuania_2025-03.pmtiles",
+          "size_mb": 150
+        }
+      ]
+    },
+    {
+      "name": "British Isles",
+      "slug": "british-isles",
+      "description": "Map assets for the United Kingdom and Ireland.",
+      "icon": "IconMap",
+      "language": "en",
+      "resources": [
+        {
+          "id": "united_kingdom",
+          "version": "2025-03",
+          "title": "United Kingdom",
+          "description": "Maps for England, Scotland, Wales, and Northern Ireland",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/united_kingdom_2025-03.pmtiles",
+          "size_mb": 2500
+        },
+        {
+          "id": "ireland",
+          "version": "2025-03",
+          "title": "Ireland",
+          "description": "Maps for the Republic of Ireland",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/ireland_2025-03.pmtiles",
+          "size_mb": 400
+        }
+      ]
+    },
+    {
+      "name": "Western Europe",
+      "slug": "western-europe",
+      "description": "Map assets for Western Europe, including France, Belgium, Netherlands, and Luxembourg.",
+      "icon": "IconMap",
+      "language": "en",
+      "resources": [
+        {
+          "id": "france",
+          "version": "2025-03",
+          "title": "France",
+          "description": "Maps for France",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/france_2025-03.pmtiles",
+          "size_mb": 3000
+        },
+        {
+          "id": "belgium",
+          "version": "2025-03",
+          "title": "Belgium",
+          "description": "Maps for Belgium",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/belgium_2025-03.pmtiles",
+          "size_mb": 400
+        },
+        {
+          "id": "netherlands",
+          "version": "2025-03",
+          "title": "Netherlands",
+          "description": "Maps for the Netherlands",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/netherlands_2025-03.pmtiles",
+          "size_mb": 500
+        },
+        {
+          "id": "luxembourg",
+          "version": "2025-03",
+          "title": "Luxembourg",
+          "description": "Maps for Luxembourg",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/luxembourg_2025-03.pmtiles",
+          "size_mb": 30
+        }
+      ]
+    },
+    {
+      "name": "Central Europe",
+      "slug": "central-europe",
+      "description": "Map assets for Central Europe, including Germany, Poland, Czech Republic, Austria, Switzerland, Hungary, and Slovakia.",
+      "icon": "IconMap",
+      "language": "en",
+      "resources": [
+        {
+          "id": "germany",
+          "version": "2025-03",
+          "title": "Germany",
+          "description": "Maps for Germany",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/germany_2025-03.pmtiles",
+          "size_mb": 3500
+        },
+        {
+          "id": "poland",
+          "version": "2025-03",
+          "title": "Poland",
+          "description": "Maps for Poland",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/poland_2025-03.pmtiles",
+          "size_mb": 1500
+        },
+        {
+          "id": "czech_republic",
+          "version": "2025-03",
+          "title": "Czech Republic",
+          "description": "Maps for the Czech Republic",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/czech_republic_2025-03.pmtiles",
+          "size_mb": 600
+        },
+        {
+          "id": "austria",
+          "version": "2025-03",
+          "title": "Austria",
+          "description": "Maps for Austria",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/austria_2025-03.pmtiles",
+          "size_mb": 500
+        },
+        {
+          "id": "switzerland",
+          "version": "2025-03",
+          "title": "Switzerland",
+          "description": "Maps for Switzerland",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/switzerland_2025-03.pmtiles",
+          "size_mb": 300
+        },
+        {
+          "id": "hungary",
+          "version": "2025-03",
+          "title": "Hungary",
+          "description": "Maps for Hungary",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/hungary_2025-03.pmtiles",
+          "size_mb": 400
+        },
+        {
+          "id": "slovakia",
+          "version": "2025-03",
+          "title": "Slovakia",
+          "description": "Maps for Slovakia",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/slovakia_2025-03.pmtiles",
+          "size_mb": 300
+        }
+      ]
+    },
+    {
+      "name": "Southern Europe",
+      "slug": "southern-europe",
+      "description": "Map assets for Southern Europe, including Spain, Portugal, Italy, Greece, Malta, and Cyprus.",
+      "icon": "IconMap",
+      "language": "en",
+      "resources": [
+        {
+          "id": "spain",
+          "version": "2025-03",
+          "title": "Spain",
+          "description": "Maps for Spain",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/spain_2025-03.pmtiles",
+          "size_mb": 2000
+        },
+        {
+          "id": "portugal",
+          "version": "2025-03",
+          "title": "Portugal",
+          "description": "Maps for Portugal",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/portugal_2025-03.pmtiles",
+          "size_mb": 400
+        },
+        {
+          "id": "italy",
+          "version": "2025-03",
+          "title": "Italy",
+          "description": "Maps for Italy",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/italy_2025-03.pmtiles",
+          "size_mb": 2500
+        },
+        {
+          "id": "greece",
+          "version": "2025-03",
+          "title": "Greece",
+          "description": "Maps for Greece",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/greece_2025-03.pmtiles",
+          "size_mb": 500
+        },
+        {
+          "id": "malta",
+          "version": "2025-03",
+          "title": "Malta",
+          "description": "Maps for Malta",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/malta_2025-03.pmtiles",
+          "size_mb": 10
+        },
+        {
+          "id": "cyprus",
+          "version": "2025-03",
+          "title": "Cyprus",
+          "description": "Maps for Cyprus",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/cyprus_2025-03.pmtiles",
+          "size_mb": 30
+        }
+      ]
+    },
+    {
+      "name": "Southeastern Europe",
+      "slug": "southeastern-europe",
+      "description": "Map assets for Southeastern Europe, including Romania, Bulgaria, Croatia, Slovenia, Serbia, and the Western Balkans.",
+      "icon": "IconMap",
+      "language": "en",
+      "resources": [
+        {
+          "id": "romania",
+          "version": "2025-03",
+          "title": "Romania",
+          "description": "Maps for Romania",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/romania_2025-03.pmtiles",
+          "size_mb": 600
+        },
+        {
+          "id": "bulgaria",
+          "version": "2025-03",
+          "title": "Bulgaria",
+          "description": "Maps for Bulgaria",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/bulgaria_2025-03.pmtiles",
+          "size_mb": 300
+        },
+        {
+          "id": "croatia",
+          "version": "2025-03",
+          "title": "Croatia",
+          "description": "Maps for Croatia",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/croatia_2025-03.pmtiles",
+          "size_mb": 300
+        },
+        {
+          "id": "slovenia",
+          "version": "2025-03",
+          "title": "Slovenia",
+          "description": "Maps for Slovenia",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/slovenia_2025-03.pmtiles",
+          "size_mb": 150
+        },
+        {
+          "id": "serbia",
+          "version": "2025-03",
+          "title": "Serbia",
+          "description": "Maps for Serbia",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/serbia_2025-03.pmtiles",
+          "size_mb": 300
+        },
+        {
+          "id": "bosnia_herzegovina",
+          "version": "2025-03",
+          "title": "Bosnia & Herzegovina",
+          "description": "Maps for Bosnia and Herzegovina",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/bosnia_herzegovina_2025-03.pmtiles",
+          "size_mb": 200
+        },
+        {
+          "id": "montenegro",
+          "version": "2025-03",
+          "title": "Montenegro",
+          "description": "Maps for Montenegro",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/montenegro_2025-03.pmtiles",
+          "size_mb": 50
+        },
+        {
+          "id": "albania",
+          "version": "2025-03",
+          "title": "Albania",
+          "description": "Maps for Albania",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/albania_2025-03.pmtiles",
+          "size_mb": 100
+        },
+        {
+          "id": "north_macedonia",
+          "version": "2025-03",
+          "title": "North Macedonia",
+          "description": "Maps for North Macedonia",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/north_macedonia_2025-03.pmtiles",
+          "size_mb": 80
+        },
+        {
+          "id": "kosovo",
+          "version": "2025-03",
+          "title": "Kosovo",
+          "description": "Maps for Kosovo",
+          "url": "https://github.com/Lukas-tek-no-logic/project-nomad-maps-europe/raw/refs/heads/main/pmtiles/kosovo_2025-03.pmtiles",
+          "size_mb": 50
+        }
+      ]
     }
   ]
 }
