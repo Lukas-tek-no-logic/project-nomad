@@ -136,7 +136,7 @@ generateRandomPass() {
   local password
   
   # Generate random password using /dev/urandom
-  password=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c "$length")
+  password=$(head -c 256 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c "$length")
   
   echo "$password"
 }
