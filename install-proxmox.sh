@@ -392,9 +392,9 @@ curl -fsSL "https://raw.githubusercontent.com/${FORK_REPO}/main/install/sidecar-
 
 # Inject IP into compose
 CT_BARE_IP=\$(echo "${CT_IP}" | cut -d/ -f1)
-APP_KEY=\$(head -c 64 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 32)
-DB_PASS=\$(head -c 64 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 32)
-ROOT_PASS=\$(head -c 64 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 32)
+APP_KEY=\$(head -c 256 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 32)
+DB_PASS=\$(head -c 256 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 32)
+ROOT_PASS=\$(head -c 256 /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 32)
 
 sed -i "s|URL=replaceme|URL=http://\${CT_BARE_IP}:8080|g"      "${NOMAD_DIR}/compose.yml"
 sed -i "s|APP_KEY=replaceme|APP_KEY=\${APP_KEY}|g"             "${NOMAD_DIR}/compose.yml"
